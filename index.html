@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#ff6b6b">
+<title>Prashants appelsap</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍎</text></svg>">
+<link rel="stylesheet" href="css/fonts.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="lvl-1">
+<div id="fallback" style="position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:#fff6e6;font:18px/1.5 'Segoe UI',sans-serif;color:#7a2b2b;text-align:center;padding:24px">
+  <div><div style="font-size:64px">🍎</div><b>Prashants appelsap wordt geladen…</b><br>
+  <small>Blijft dit staan? Pak de zip dan eerst uit (rechtermuisklik → <i>Alles uitpakken</i>) en open daarna <b>index.html</b> in de uitgepakte map.</small></div>
+</div>
+
+<canvas id="fx" aria-hidden="true"></canvas>
+<div class="bg-deco" aria-hidden="true"><span>🍎</span><span>🧃</span><span>🍏</span><span>🍎</span><span>🧃</span><span>🍏</span><span>🍎</span><span>🧃</span></div>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-apple" aria-hidden="true">🍎</span>
+    <h1>Prashants <span>appelsap</span></h1>
+  </div>
+  <div class="top-actions">
+    <button id="btnDaily" class="icon-btn daily" title="Dagelijkse beloning (D)" aria-label="Dagelijkse beloning (D)"><span>🎁</span><i class="dot" hidden></i></button>
+    <button id="btnSound" class="icon-btn" title="Geluid aan/uit (M)" aria-label="Geluid aan/uit (M)">🔊</button>
+    <button id="btnHelp" class="icon-btn" title="Hulp en sneltoetsen (H)" aria-label="Hulp en sneltoetsen (H)">❔</button>
+  </div>
+</header>
+
+<section class="stats" aria-label="Voortgang">
+  <div class="stat stat-sap">
+    <span class="stat-label">Totaal appelsap</span>
+    <span class="stat-value"><span class="mini-glass" aria-hidden="true"></span><b id="sapValue">0</b></span>
+  </div>
+  <div class="stat stat-sps">
+    <span class="stat-label">Per seconde</span>
+    <span class="stat-value"><b id="spsValue">0</b><small>/sec</small></span>
+  </div>
+  <div class="stat stat-level">
+    <div class="level-row">
+      <span class="level-badge">Level <b id="levelValue">1</b></span>
+      <span id="levelName" class="level-name">Lichtgeel appelsap</span>
+    </div>
+    <div class="progress" role="progressbar" aria-label="Voortgang naar het volgende level" aria-valuemin="0" aria-valuemax="100" id="levelProgress">
+      <div class="progress-fill" id="levelBar"></div>
+    </div>
+    <small id="levelNext" class="level-next">Nog 1.000 tot level 2</small>
+  </div>
+</section>
+
+<main class="layout">
+  <section class="clicker" id="clicker" aria-label="Appel">
+    <div class="buffs" id="buffs" aria-live="polite"></div>
+    <div class="challenge-banner" id="challengeBanner" hidden></div>
+
+    <div class="stage" id="stage">
+      <div class="rays" aria-hidden="true"></div>
+      <div class="aura" aria-hidden="true"></div>
+      <div class="orbit" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <div class="ring" aria-hidden="true"></div>
+
+      <button id="apple" class="apple-btn" aria-label="Klik op de appel voor appelsap (Spatie)">
+        <svg viewBox="0 0 200 210" class="apple-svg" aria-hidden="true">
+          <defs>
+            <radialGradient id="appleGrad" cx="38%" cy="35%" r="70%">
+              <stop offset="0%" stop-color="#FF9B9B"/>
+              <stop offset="45%" stop-color="#FF3D4F"/>
+              <stop offset="100%" stop-color="#B80D2A"/>
+            </radialGradient>
+            <linearGradient id="leafGrad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#9BE36B"/>
+              <stop offset="100%" stop-color="#2E9E3F"/>
+            </linearGradient>
+            <linearGradient id="crownGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#FFF3A0"/>
+              <stop offset="100%" stop-color="#E5A800"/>
+            </linearGradient>
+          </defs>
+          <ellipse cx="100" cy="196" rx="62" ry="9" fill="rgba(90,20,40,.18)"/>
+          <path class="apple-body" d="M100 58 C84 42 34 36 26 92 C19 146 58 192 84 188 C93 187 96 183 100 183 C104 183 107 187 116 188 C142 192 181 146 174 92 C166 36 116 42 100 58 Z"
+                fill="url(#appleGrad)" stroke="#7E0B22" stroke-width="5" stroke-linejoin="round"/>
+          <path d="M100 58 C96 70 96 80 100 92" fill="none" stroke="#9E1530" stroke-width="3" stroke-linecap="round" opacity=".5"/>
+          <ellipse cx="60" cy="88" rx="13" ry="24" transform="rotate(-24 60 88)" fill="#fff" opacity=".55"/>
+          <circle cx="74" cy="64" r="6" fill="#fff" opacity=".6"/>
+          <path d="M100 60 C98 44 102 30 112 18" fill="none" stroke="#6B3E1F" stroke-width="8" stroke-linecap="round"/>
+          <g class="leaf">
+            <path d="M108 32 C120 10 154 8 166 20 C152 40 124 46 108 32 Z" fill="url(#leafGrad)" stroke="#1E6B2A" stroke-width="4" stroke-linejoin="round"/>
+            <path d="M112 31 C128 26 142 22 158 20" fill="none" stroke="#1E6B2A" stroke-width="2.5" stroke-linecap="round" opacity=".7"/>
+          </g>
+          <g class="face">
+            <g class="eyes">
+              <ellipse cx="78" cy="116" rx="8" ry="11" fill="#3A0A18"/>
+              <ellipse cx="122" cy="116" rx="8" ry="11" fill="#3A0A18"/>
+              <circle cx="81" cy="111" r="3.2" fill="#fff"/>
+              <circle cx="125" cy="111" r="3.2" fill="#fff"/>
+            </g>
+            <ellipse cx="62" cy="136" rx="10" ry="6" fill="#FF9FB0" opacity=".75"/>
+            <ellipse cx="138" cy="136" rx="10" ry="6" fill="#FF9FB0" opacity=".75"/>
+            <path class="mouth" d="M86 138 Q100 154 114 138" fill="#7E0B22" stroke="#3A0A18" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+          </g>
+          <g class="crown">
+            <path d="M66 50 L72 18 L88 36 L100 8 L112 36 L128 18 L134 50 Z" fill="url(#crownGrad)" stroke="#A86F00" stroke-width="4" stroke-linejoin="round"/>
+            <circle cx="100" cy="38" r="5" fill="#FF4B9B"/><circle cx="80" cy="42" r="3.5" fill="#4FC3FF"/><circle cx="120" cy="42" r="3.5" fill="#6BDC6B"/>
+          </g>
+        </svg>
+      </button>
+
+      <div class="glass-wrap" aria-hidden="true" title="Je glas vult zich richting het volgende level">
+        <div class="straw"></div>
+        <div class="glass">
+          <div class="juice" id="glassJuice">
+            <div class="wave"></div>
+            <div class="bubbles"><i></i><i></i><i></i><i></i><i></i></div>
+          </div>
+          <div class="glass-shine"></div>
+        </div>
+        <div class="glass-label" id="glassLabel">0%</div>
+      </div>
+    </div>
+
+    <div class="click-info">
+      <span>+<b id="perClick">1</b> per klik</span>
+      <span class="kbd-hint"><kbd>Spatie</kbd> = klikken</span>
+    </div>
+
+    <div class="ticker" aria-live="off"><span class="ticker-icon">📰</span><span id="tickerText" class="ticker-text"></span></div>
+  </section>
+
+  <section class="panel" aria-label="Menu">
+    <nav class="tabs" role="tablist">
+      <button class="tab active" role="tab" aria-selected="true" aria-controls="tab-shop" id="t-shop" data-tab="shop"><span>🛒</span>Shop<kbd>U</kbd></button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="tab-world" id="t-world" data-tab="world"><span>🌍</span>Wereld<kbd>W</kbd><i class="dot" hidden></i></button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="tab-ach" id="t-ach" data-tab="ach"><span>🏆</span>Prestaties<kbd>P</kbd></button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="tab-overview" id="t-overview" data-tab="overview"><span>📋</span>Overzicht<kbd>O</kbd></button>
+    </nav>
+
+    <div class="tab-body" id="tab-shop" role="tabpanel" aria-labelledby="t-shop">
+      <h2 class="section-title">✨ Upgrades <small>eenmalig te kopen</small></h2>
+      <div class="upgrades" id="upgradeList"></div>
+      <div class="section-head">
+        <h2 class="section-title">🏗️ Sapmakers <small>produceren automatisch</small></h2>
+        <div class="amount" role="group" aria-label="Hoeveel kopen">
+          <button data-amt="1" class="on">×1</button><button data-amt="10">×10</button><button data-amt="100">×100</button><button data-amt="max">Max</button>
+        </div>
+      </div>
+      <div class="buildings" id="buildingList"></div>
+    </div>
+
+    <div class="tab-body" id="tab-world" role="tabpanel" aria-labelledby="t-world" hidden>
+      <div class="world-frame">
+        <svg id="worldSvg" class="world-svg" viewBox="0 0 800 450" role="img" aria-label="Jouw appelsapwereld">
+          <defs>
+            <linearGradient id="skyDay" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#8FD8FF"/><stop offset="100%" stop-color="#FFF1D6"/></linearGradient>
+            <linearGradient id="skyMagic" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#2A0F5C"/><stop offset="60%" stop-color="#7A3FB8"/><stop offset="100%" stop-color="#FFB3D9"/></linearGradient>
+            <linearGradient id="juiceGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" class="js1"/><stop offset="55%" class="js2"/><stop offset="100%" class="js3"/>
+            </linearGradient>
+            <linearGradient id="rainbowGrad" x1="0" y1="0" x2="1" y2="0" spreadMethod="repeat" gradientUnits="objectBoundingBox">
+              <stop offset="0%" stop-color="#FF5E7E"/><stop offset="17%" stop-color="#FFB347"/><stop offset="34%" stop-color="#FFE74C"/>
+              <stop offset="51%" stop-color="#6BDC6B"/><stop offset="68%" stop-color="#4FC3FF"/><stop offset="85%" stop-color="#A77BFF"/><stop offset="100%" stop-color="#FF5E7E"/>
+              <animateTransform attributeName="gradientTransform" type="translate" from="0 0" to="1 0" dur="4s" repeatCount="indefinite"/>
+            </linearGradient>
+            <radialGradient id="sunGrad"><stop offset="0%" stop-color="#FFF8C4"/><stop offset="100%" stop-color="#FFC93C"/></radialGradient>
+            <g id="tree">
+              <rect x="-7" y="-10" width="14" height="40" rx="5" fill="#8B5A2B" stroke="#5A3515" stroke-width="3"/>
+              <g class="sway">
+                <circle cx="0" cy="-34" r="30" fill="#4CB944" stroke="#2A7A2E" stroke-width="3"/>
+                <circle cx="-22" cy="-18" r="20" fill="#5ACB50" stroke="#2A7A2E" stroke-width="3"/>
+                <circle cx="22" cy="-18" r="20" fill="#5ACB50" stroke="#2A7A2E" stroke-width="3"/>
+                <circle cx="-8" cy="-46" r="6" fill="#FF3D4F"/><circle cx="12" cy="-30" r="6" fill="#FF3D4F"/>
+                <circle cx="-20" cy="-20" r="5.5" fill="#FF3D4F"/><circle cx="20" cy="-14" r="5.5" fill="#FF3D4F"/><circle cx="2" cy="-12" r="5" fill="#FF3D4F"/>
+              </g>
+            </g>
+          </defs>
+
+          <rect class="sky" width="800" height="450" fill="url(#skyDay)"/>
+          <rect class="sky-magic" width="800" height="450" fill="url(#skyMagic)"/>
+          <g class="stars"><circle cx="60" cy="40" r="2"/><circle cx="240" cy="70" r="1.5"/><circle cx="330" cy="30" r="2.5"/><circle cx="470" cy="60" r="1.5"/><circle cx="560" cy="25" r="2"/><circle cx="760" cy="50" r="2"/><circle cx="420" cy="110" r="1.5"/><circle cx="20" cy="120" r="1.5"/><circle cx="600" cy="120" r="2"/></g>
+          <g class="sun"><circle cx="700" cy="80" r="40" fill="url(#sunGrad)"/><g class="sun-rays" stroke="#FFD45C" stroke-width="6" stroke-linecap="round"><line x1="700" y1="22" x2="700" y2="8"/><line x1="700" y1="138" x2="700" y2="152"/><line x1="642" y1="80" x2="628" y2="80"/><line x1="758" y1="80" x2="772" y2="80"/><line x1="659" y1="39" x2="649" y2="29"/><line x1="741" y1="121" x2="751" y2="131"/><line x1="741" y1="39" x2="751" y2="29"/><line x1="659" y1="121" x2="649" y2="131"/></g></g>
+          <g class="clouds">
+            <g class="cloud c1"><ellipse cx="150" cy="70" rx="45" ry="18" fill="#fff"/><ellipse cx="125" cy="62" rx="25" ry="18" fill="#fff"/><ellipse cx="170" cy="58" rx="28" ry="20" fill="#fff"/></g>
+            <g class="cloud c2"><ellipse cx="480" cy="50" rx="38" ry="15" fill="#fff"/><ellipse cx="462" cy="43" rx="20" ry="14" fill="#fff"/><ellipse cx="498" cy="42" rx="22" ry="16" fill="#fff"/></g>
+          </g>
+
+          <!-- planeet -->
+          <g class="part" data-part="planeet">
+            <g class="planet">
+              <ellipse cx="150" cy="105" rx="92" ry="20" fill="none" stroke="#FFFFFF" stroke-opacity=".6" stroke-width="7" transform="rotate(-15 150 105)"/>
+              <circle cx="150" cy="105" r="55" class="jfill" fill="url(#juiceGrad)" stroke="#fff" stroke-width="4"/>
+              <ellipse cx="130" cy="85" rx="16" ry="10" fill="#fff" opacity=".5"/>
+              <circle cx="170" cy="120" r="8" fill="#000" opacity=".1"/><circle cx="140" cy="130" r="5" fill="#000" opacity=".1"/>
+              <path d="M58 117 A92 20 -15 0 0 242 93" fill="none" stroke="#FFFFFF" stroke-opacity=".85" stroke-width="7" transform="rotate(0)"/>
+              <g class="moon"><text x="0" y="0" font-size="22" text-anchor="middle">🍎</text></g>
+            </g>
+          </g>
+
+          <!-- leeg begin: zwevend eilandje -->
+          <g class="part-start">
+            <ellipse cx="400" cy="300" rx="90" ry="22" fill="#7FCB5A" stroke="#3E8A2E" stroke-width="4"/>
+            <path d="M312 300 Q400 400 488 300 Z" fill="#B97A45" stroke="#6E4422" stroke-width="4"/>
+            <g transform="translate(400 260)">
+              <path d="M-18 -30 L18 -30 L14 28 L-14 28 Z" fill="#ffffff" fill-opacity=".55" stroke="#9AC" stroke-width="3"/>
+              <path d="M-15 -10 L15 -10 L13 26 L-13 26 Z" class="jfill" fill="url(#juiceGrad)"/>
+            </g>
+            <text x="400" y="390" text-anchor="middle" class="world-hint">Eén klein glaasje… bouw hier je wereld!</text>
+          </g>
+
+          <!-- grasland: achterste heuvel -->
+          <g class="part" data-part="gras">
+            <path d="M0 290 Q 200 220 420 270 T 800 255 V450 H0 Z" fill="#9BDB6F" stroke="#5FA845" stroke-width="4"/>
+          </g>
+
+          <!-- kasteel -->
+          <g class="part" data-part="kasteel">
+            <g transform="translate(400 262)">
+              <rect x="-70" y="-80" width="140" height="80" fill="#FFF0E0" stroke="#B5826A" stroke-width="4"/>
+              <rect x="-100" y="-120" width="40" height="120" fill="#FFE5D0" stroke="#B5826A" stroke-width="4"/>
+              <rect x="60" y="-120" width="40" height="120" fill="#FFE5D0" stroke="#B5826A" stroke-width="4"/>
+              <rect x="-22" y="-150" width="44" height="80" fill="#FFE5D0" stroke="#B5826A" stroke-width="4"/>
+              <path d="M-106 -120 L-80 -165 L-54 -120 Z" class="jfill" fill="url(#juiceGrad)" stroke="#B5826A" stroke-width="4"/>
+              <path d="M54 -120 L80 -165 L106 -120 Z" class="jfill" fill="url(#juiceGrad)" stroke="#B5826A" stroke-width="4"/>
+              <path d="M-28 -150 L0 -200 L28 -150 Z" class="jfill" fill="url(#juiceGrad)" stroke="#B5826A" stroke-width="4"/>
+              <line x1="0" y1="-200" x2="0" y2="-222" stroke="#7A4A2A" stroke-width="3"/>
+              <path class="flag" d="M0 -222 L22 -215 L0 -207 Z" fill="#FF3D4F"/>
+              <path d="M-16 0 L-16 -30 Q0 -48 16 -30 L16 0 Z" fill="#8B5A2B" stroke="#5A3515" stroke-width="3"/>
+              <rect x="-90" y="-95" width="14" height="20" rx="7" class="window"/><rect x="76" y="-95" width="14" height="20" rx="7" class="window"/>
+              <rect x="-7" y="-130" width="14" height="22" rx="7" class="window"/>
+              <rect x="-50" y="-60" width="14" height="20" rx="7" class="window"/><rect x="36" y="-60" width="14" height="20" rx="7" class="window"/>
+              <text x="0" y="-92" font-size="20" text-anchor="middle">🍎</text>
+            </g>
+          </g>
+
+          <!-- fabrieken -->
+          <g class="part" data-part="fabrieken">
+            <g transform="translate(40 300)">
+              <g class="smoke"><circle cx="38" cy="-80" r="10"/><circle cx="38" cy="-80" r="12"/><circle cx="38" cy="-80" r="9"/></g>
+              <g class="smoke s2"><circle cx="128" cy="-92" r="10"/><circle cx="128" cy="-92" r="12"/><circle cx="128" cy="-92" r="9"/></g>
+              <rect x="30" y="-80" width="16" height="40" fill="#C98B6B" stroke="#7A4A3A" stroke-width="3"/>
+              <rect x="120" y="-92" width="16" height="52" fill="#C98B6B" stroke="#7A4A3A" stroke-width="3"/>
+              <path d="M0 0 V-45 L30 -60 V-45 L60 -60 V-45 L90 -60 V0 Z" fill="#F2B8A0" stroke="#7A4A3A" stroke-width="4" stroke-linejoin="round"/>
+              <path d="M90 0 V-50 H160 V0 Z" fill="#F7C9B2" stroke="#7A4A3A" stroke-width="4"/>
+              <rect x="12" y="-30" width="16" height="14" rx="3" class="window"/><rect x="45" y="-30" width="16" height="14" rx="3" class="window"/>
+              <rect x="104" y="-36" width="44" height="18" rx="6" class="jfill" fill="url(#juiceGrad)" stroke="#7A4A3A" stroke-width="3"/>
+              <text x="126" y="-22" font-size="12" text-anchor="middle" font-weight="700" fill="#7A2B2B">SAP</text>
+            </g>
+          </g>
+
+          <!-- waterval: klif rechts -->
+          <g class="part" data-part="waterval">
+            <path d="M590 340 L600 200 Q640 160 700 170 Q760 150 800 165 V360 Z" fill="#B98A64" stroke="#6E4E34" stroke-width="4" stroke-linejoin="round"/>
+            <path d="M600 200 Q640 160 700 170 Q760 150 800 165 V180 Q750 168 700 186 Q640 178 604 214 Z" fill="#7FCB5A"/>
+            <rect x="600" y="196" width="34" height="164" class="jfill" fill="url(#juiceGrad)"/>
+            <g class="fall-lines" stroke="#fff" stroke-opacity=".7" stroke-width="3" stroke-linecap="round">
+              <line x1="608" y1="200" x2="608" y2="360"/><line x1="617" y1="200" x2="617" y2="360"/><line x1="626" y1="200" x2="626" y2="360"/>
+            </g>
+            <g class="foam"><circle cx="604" cy="360" r="9" fill="#fff"/><circle cx="618" cy="364" r="11" fill="#fff"/><circle cx="632" cy="360" r="9" fill="#fff"/></g>
+          </g>
+
+          <!-- grasland: voorste heuvel -->
+          <g class="part" data-part="gras">
+            <path d="M0 340 Q 240 300 480 345 T 800 335 V450 H0 Z" fill="#6CC04A" stroke="#3E8A2E" stroke-width="4"/>
+            <g class="flowers">
+              <circle cx="60" cy="400" r="5" fill="#FF7AA2"/><circle cx="140" cy="425" r="5" fill="#FFE74C"/><circle cx="300" cy="420" r="5" fill="#fff"/>
+              <circle cx="700" cy="420" r="5" fill="#FF7AA2"/><circle cx="760" cy="400" r="5" fill="#FFE74C"/><circle cx="230" cy="395" r="4" fill="#A77BFF"/>
+            </g>
+          </g>
+
+          <!-- rivier -->
+          <g class="part" data-part="rivier">
+            <path d="M-10 368 C 70 352, 120 392, 200 386 S 300 396, 380 392" fill="none" stroke="#3E8A2E" stroke-width="30" stroke-linecap="round" opacity=".35"/>
+            <path class="jstroke" d="M-10 368 C 70 352, 120 392, 200 386 S 300 396, 380 392" fill="none" stroke="url(#juiceGrad)" stroke-width="22" stroke-linecap="round"/>
+            <path class="flow" d="M-10 368 C 70 352, 120 392, 200 386 S 300 396, 380 392" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="3" stroke-dasharray="14 26" stroke-linecap="round"/>
+          </g>
+
+          <!-- meer -->
+          <g class="part" data-part="meer">
+            <ellipse cx="490" cy="392" rx="150" ry="36" fill="#3E8A2E" opacity=".35"/>
+            <ellipse cx="490" cy="390" rx="142" ry="31" class="jfill" fill="url(#juiceGrad)" stroke="#fff" stroke-width="3"/>
+            <ellipse class="shine" cx="440" cy="382" rx="40" ry="5" fill="#fff" opacity=".6"/>
+            <ellipse class="shine s2" cx="540" cy="398" rx="26" ry="4" fill="#fff" opacity=".5"/>
+            <g class="duck"><text x="520" y="392" font-size="26" text-anchor="middle">🦆</text></g>
+          </g>
+
+          <!-- bomen -->
+          <g class="part" data-part="bomen">
+            <use href="#tree" transform="translate(245 345) scale(.85)"/>
+            <use href="#tree" transform="translate(320 360) scale(.7)"/>
+            <use href="#tree" transform="translate(90 420) scale(1)"/>
+            <use href="#tree" transform="translate(700 410) scale(.9)"/>
+            <use href="#tree" transform="translate(760 160) scale(.6)"/>
+            <use href="#tree" transform="translate(180 278) scale(.55)"/>
+          </g>
+
+          <!-- magische fonkels (level 8) -->
+          <g class="gold-sparkles"><text x="120" y="230" font-size="18">✨</text><text x="560" y="250" font-size="16">✨</text><text x="330" y="160" font-size="20">✨</text><text x="720" y="300" font-size="16">✨</text></g>
+        </svg>
+        <div class="world-progress"><b id="worldCount">0/8</b> delen ontgrendeld · <span id="worldBonus">+0%</span> productie</div>
+      </div>
+      <div class="world-list" id="worldList"></div>
+    </div>
+
+    <div class="tab-body" id="tab-ach" role="tabpanel" aria-labelledby="t-ach" hidden>
+      <h2 class="section-title">🎯 Uitdagingen <small>start er één en haal het doel op tijd</small></h2>
+      <div class="challenges" id="challengeList"></div>
+      <h2 class="section-title">🏆 Achievements <small id="achCount">0/0</small></h2>
+      <p class="muted">Elke achievement geeft <b>+2%</b> op al je productie!</p>
+      <div class="achievements" id="achList"></div>
+    </div>
+
+    <div class="tab-body" id="tab-overview" role="tabpanel" aria-labelledby="t-overview" hidden>
+      <h2 class="section-title">📊 Statistieken</h2>
+      <div class="stat-grid" id="statGrid"></div>
+      <h2 class="section-title">🎨 Jouw sapkleuren</h2>
+      <div class="swatches" id="swatches"></div>
+      <h2 class="section-title">🔓 Ontgrendelde onderdelen</h2>
+      <div id="unlocked"></div>
+      <h2 class="section-title">⚙️ Instellingen</h2>
+      <div class="settings">
+        <button id="btnSave" class="btn">💾 Nu opslaan</button>
+        <button id="btnExport" class="btn">📤 Exporteren</button>
+        <button id="btnImport" class="btn">📥 Importeren</button>
+        <button id="btnReset" class="btn danger">🗑️ Opnieuw beginnen</button>
+      </div>
+      <p class="muted" id="saveInfo">Je voortgang wordt automatisch opgeslagen.</p>
+    </div>
+  </section>
+</main>
+
+<button id="golden" class="golden-apple" hidden aria-label="Gouden appel! Klik snel (G)">
+  <svg viewBox="0 0 100 100" aria-hidden="true">
+    <defs><radialGradient id="gGrad" cx="38%" cy="35%" r="70%"><stop offset="0%" stop-color="#FFF8C4"/><stop offset="50%" stop-color="#FFD54A"/><stop offset="100%" stop-color="#C68F00"/></radialGradient></defs>
+    <path d="M50 28 C42 20 16 18 13 46 C10 73 29 96 42 94 C46 93 48 91 50 91 C52 91 54 93 58 94 C71 96 90 73 87 46 C84 18 58 20 50 28 Z" fill="url(#gGrad)" stroke="#A86F00" stroke-width="3"/>
+    <path d="M50 29 C49 22 51 15 56 9" fill="none" stroke="#6B3E1F" stroke-width="4" stroke-linecap="round"/>
+    <path d="M54 16 C60 5 77 4 83 10 C76 20 62 23 54 16 Z" fill="#6BDC6B" stroke="#2E7A2E" stroke-width="2"/>
+    <ellipse cx="32" cy="44" rx="6" ry="12" transform="rotate(-24 32 44)" fill="#fff" opacity=".7"/>
+  </svg>
+</button>
+
+<div id="toasts" class="toasts" aria-live="polite"></div>
+
+<div id="modal" class="modal" hidden>
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<script src="js/util.js"></script>
+<script src="js/data.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/fx.js"></script>
+<script src="js/game.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
